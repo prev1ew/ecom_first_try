@@ -39,7 +39,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'phone',
             'gender',
             'is_active',
-            'is_stuff',
+            'is_staff',
             'is_superuser',
         )
 

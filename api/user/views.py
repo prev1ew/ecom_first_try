@@ -38,7 +38,8 @@ def signin(request):
         user = UserModel.objects.get(email=username)
 
         if user.check_password(password):
-            user_dict = UserModel.objects.filter(email=username).values()
+            user_dict = UserModel.objects.filter(email=username).values().first()
+
             user_dict.pop('password')
 
             if user.session_token != "0":
@@ -56,6 +57,21 @@ def signin(request):
 
     except UserModel.DoesNotExist:
         return JsonResponse({'error': 'Invalid Email'})
+
+
+def signout(request, id):
+    logout(request)
+
+    UserModel = get_user_model()
+
+    try:
+        user = UserModel.objects.get(pk=id)
+        user.session_token = "0"
+        user.save()
+
+    except UserModel.DoesNotExist:
+        return JsonResponse({'error': 'Invalid user ID'})
+    return JsonResponse({'success': 'Logout success'})
 
 
 class UserViewSet(viewsets.ModelViewSet):
